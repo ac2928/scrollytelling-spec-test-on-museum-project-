@@ -2,7 +2,7 @@
 **Topic:** The Evolution of Web Design (1990s Deep Dive)
 
 ## Live Demo
-https://ac2928.github.io/scrollytelling-spec-test-on-museum-
+https://ac2928.github.io/scrollytelling-spec-test-on-museum-project-/
 
 ---
 
