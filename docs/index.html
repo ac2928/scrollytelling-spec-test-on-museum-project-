@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrollytelling Test | The 1990s</title>
+    <style>
+        /* CSS GOES HERE - This makes it "Bulletproof" */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --sage-accent: #87A96B;
+            --transition-speed: 0.8s;
+            --swiss-border: 2px solid #1a1a1a;
+        }
+
+        body, html { margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, sans-serif; }
+
+        .scrolly-container { position: relative; height: 300vh; background: #f4f4f4; }
+
+        .sticky-visual-wrapper {
+            position: sticky;
+            top: 0; height: 100vh; width: 100%;
+            display: flex; align-items: center; justify-content: flex-end;
+            transition: background-color var(--transition-speed) ease;
+        }
+
+        .visual-element {
+            position: absolute;
+            right: 10%; width: 40%; height: 50vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: white; border: var(--swiss-border);
+            box-shadow: 15px 15px 0px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all var(--transition-speed) cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .visual-element.active { opacity: 1; transform: translateX(0); }
+
+        .narrative-overlay { position: absolute; top: 0; left: 0; width: 100%; z-index: 10; pointer-events: none; }
+
+        .step { height: 100vh; display: flex; align-items: center; padding-left: 8%; width: 40%; }
+
+        .step-content {
+            background: white; padding: 2.5rem; border: var(--swiss-border);
+            box-shadow: 10px 10px 0px var(--sage-accent);
+            pointer-events: all;
+        }
+
+        .exhibit-label { color: var(--sage-accent); font-weight: bold; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 0.5rem; }
+        h2 { font-size: 2rem; margin: 0 0 1rem 0; }
+
+        /* State Themes */
+        .state-1 .sticky-visual-wrapper { background-color: #ffffff; }
+        .state-2 .sticky-visual-wrapper { background-color: #f9fbf7; }
+        .state-3 .sticky-visual-wrapper { background-color: #1a1a1a; }
+        .state-3 .step-content { background: #222; color: white; border-color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="scrolly-container" id="scrolly-section">
+        
+        <div class="sticky-visual-wrapper">
+            <div class="visual-element" id="vis-1">
+                <span style="font-size: 4rem;">🖥️</span>
+                <p style="font-size: 0.7rem; text-transform: uppercase; color: #999;">1990s Desktop</p>
+            </div>
+
+            <div class="visual-element" id="vis-2">
+                <span style="font-size: 4rem;">🌐</span>
+                <p style="font-size: 0.7rem; text-transform: uppercase; color: #999;">Mosaic Browser</p>
+            </div>
+
+            <div class="visual-element" id="vis-3">
+                <div style="font-family: monospace; color: var(--sage-accent); background: #000; padding: 15px; border-radius: 4px;">
+                    &lt;table border="1"&gt;<br>
+                    &nbsp;&nbsp;&lt;tr&gt;&lt;td&gt;Layout&lt;/td&gt;&lt;/tr&gt;<br>
+                    &lt;/table&gt;
+                </div>
+            </div>
+        </div>
+
+        <div class="narrative-overlay">
+            <section class="step" data-step="1">
+                <div class="step-content">
+                    <div class="exhibit-label">Exhibit I</div>
+                    <h2>The Technical Birth</h2>
+                    <p>In 1991, the web was text-only. Built for academics, not designers.</p>
+                </div>
+            </section>
+
+            <section class="step" data-step="2">
+                <div class="step-content">
+                    <div class="exhibit-label">Exhibit II</div>
+                    <h2>The Graphical Revolution</h2>
+                    <p>Mosaic (1993) brought images inline, sparking the visual web.</p>
+                </div>
+            </section>
+
+            <section class="step" data-step="3">
+                <div class="step-content">
+                    <div class="exhibit-label">Exhibit III</div>
+                    <h2>The Era of Tables</h2>
+                    <p>Designers used HTML tables to create the first structured grids.</p>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        // Use IntersectionObserver to toggle the 'active' class
+        const steps = document.querySelectorAll('.step');
+        const visuals = document.querySelectorAll('.visual-element');
+        const container = document.getElementById('scrolly-section');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const stepNum = entry.target.getAttribute('data-step');
+                    visuals.forEach(v => v.classList.remove('active'));
+                    container.classList.remove('state-1', 'state-2', 'state-3');
+                    document.getElementById(`vis-${stepNum}`).classList.add('active');
+                    container.classList.add(`state-${stepNum}`);
+                }
+            });
+        }, { threshold: 0.6 });
+
+        steps.forEach(step => observer.observe(step));
+    </script>
+</body>
+</html>
